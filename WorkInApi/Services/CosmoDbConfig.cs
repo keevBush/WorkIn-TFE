@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkInApi.Services
 {
-    public class CosmoDbConfig
+    public abstract class CosmoDbConfig
     {
         private static IDocumentDBConnection _instance = null;
         public static IDocumentDBConnection Instance
