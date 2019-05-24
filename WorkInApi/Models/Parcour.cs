@@ -18,6 +18,8 @@ namespace WorkInApi.Models
         public double Pourcentage { get; set; }
         [JsonProperty("logo")]
         public string Photo { get; set; }
+        [JsonProperty("typeInstitution")]
+        public TypeInstitution TypeInstitution { get; set; }
     }
     public enum TypeInstitution
     {

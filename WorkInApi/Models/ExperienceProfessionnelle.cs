@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkInApi.Models
 {
-    public class ExperienceProfetionnelle
+    public class ExperienceProfessionnelle
     {
         [JsonProperty("id")]
         public string Id { get; set; }

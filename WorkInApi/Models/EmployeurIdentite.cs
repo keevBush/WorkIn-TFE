@@ -18,6 +18,8 @@ namespace WorkInApi.Models
         public double Latitude { get; set; }
         [JsonProperty("longitude")]
         public double Longitude { get; set; }
+        [JsonProperty("profil")]
+        public string ImageProfil { get; set; }
         [JsonProperty("idNational")]
         public string IdNational { get; set; }
         [JsonProperty("domaines")]
