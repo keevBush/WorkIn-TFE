@@ -4,6 +4,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using WorkInApi.MachineLearning;
+using WorkInApi.Models;
 
 namespace WorkInApi.Controllers
 {
@@ -14,7 +17,7 @@ namespace WorkInApi.Controllers
         public static string Hash(string data)
         {
             byte[] salt= new byte[16];
-            var h = new Rfc2898DeriveBytes("data0", salt, 10000);
+            var h = new Rfc2898DeriveBytes("123456", salt, 10000);
             var hashingBytes = h.GetBytes(20);
 
             return Convert.ToBase64String (hashingBytes);
@@ -30,12 +33,17 @@ namespace WorkInApi.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            var comment = new PredictedModels.PredictedCommentaire()
+            {
+                Value = "Je déteste ce projet"
+            };
+            var data= comment.AttribScoreAndTypeOfComment();
+            return JsonConvert.SerializeObject(data);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post()
         {
         }
 

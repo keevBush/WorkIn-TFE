@@ -36,6 +36,8 @@ namespace WorkInApi.Models
         public string Apropos { get; set; }
         [JsonProperty("localisation")]
         public string Localisation { get; set; }
+        [JsonProperty("is_verified")]
+        public bool IsVerified { get; set; }
     }
     public enum Genre
     {

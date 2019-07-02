@@ -37,7 +37,7 @@ namespace WorkInApi.DAL
         public IEnumerable<Demandeur> GetItems(Expression<Func<Demandeur, bool>> where)
         {
             Uri collectionUri = UriFactory.CreateDocumentCollectionUri(CosmoDbConfig.Instance.DatabaseId, "demandeurs");
-            FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1 };
+            FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1 ,EnableCrossPartitionQuery=true};
             IDocumentQuery<Demandeur> demandeurs;
             if (where == null)
                 demandeurs  = CosmoDbConfig.Instance.Client.
@@ -53,7 +53,6 @@ namespace WorkInApi.DAL
                 listofDemandeur.AddRange(demandeurs.ExecuteNextAsync<Demandeur>().Result);
             return listofDemandeur;
         }
-
         public void NewItems(params Demandeur[] items)
         {
             foreach (var i in items)

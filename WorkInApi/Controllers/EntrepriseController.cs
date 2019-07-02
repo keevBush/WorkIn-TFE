@@ -14,37 +14,7 @@ namespace WorkInApi.Controllers
     [ApiController]
     public class EntrepriseController : ControllerBase
     {
-        // GET: api/Entreprise
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Entreprise/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Entreprise
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT: api/Entreprise/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
         [HttpPost]
         public void NouvelEntreprise([FromBody]EmployeurIdentite employeurIdentite)
         {
@@ -67,7 +37,7 @@ namespace WorkInApi.Controllers
 
         }
         [HttpGet]
-        public ActionResult<Entreprise> Connection([FromBody]string email,[FromBody]string password)
+        public ActionResult<Entreprise> Connection([FromBody]string email,string password)
         {
             var entreprise = new EntrepriseCollection().GetItems(
                 (e) => e.EmployeurIdentite.Email == email && e.EmployeurIdentite.MotDePasse == password).FirstOrDefault();

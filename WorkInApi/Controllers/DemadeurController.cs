@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WorkInApi.DAL;
 using WorkInApi.Models;
 
@@ -12,6 +13,8 @@ namespace WorkInApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
+    [Consumes("application/json")]
     public class DemadeurController : ControllerBase
     {
         // GET: api/Demadeur
@@ -31,8 +34,9 @@ namespace WorkInApi.Controllers
 
         // POST: api/Demadeur
         [HttpPost]
-        public void Post([FromBody] DemandeurIdentite value)
+        public async Task<IActionResult> Post([FromBody] string value)
         {
+            return StatusCode(200);
         }
 
         // PUT: api/Demadeur/5
@@ -46,26 +50,46 @@ namespace WorkInApi.Controllers
         public void Delete(int id)
         {
         }
-        [HttpPost]
-        public IEnumerable<Demandeur> Connexion([FromBody]string email,string password)
+        [HttpPost("connexion")]
+        public ActionResult<DemandeurIdentite> Connexion([FromBody]string jsondata)
         {
             UserCollection userCollection = new UserCollection();
-            return userCollection.GetItems((d) => d.Identite.Email == email && d.Identite.Password==password);
+            var user = JsonConvert.DeserializeObject<DemandeurIdentite>(jsondata); 
+            var resut= userCollection.GetItems((d) => d.Identite.Email == user.Email && d.Identite.Password==user.Password).FirstOrDefault();
+            if (resut == null)
+                return StatusCode(500, "Internal Server Error: Verifier les information de connexion");
+            else
+                return resut.Identite;
         }
-        [HttpPost]
-        public void NouveauDemandeur([FromBody]DemandeurIdentite demandeur)
+        [HttpPost("inscription")]
+        public ActionResult NouveauDemandeur( [FromBody]string jsondata)
         {
+            var demandeur = JsonConvert.DeserializeObject<DemandeurIdentite>(jsondata);
             UserCollection userCollection = new UserCollection();
-            userCollection.NewItems(new Demandeur
-            {
-                Identite = demandeur
-            });
+            var resut = userCollection.GetItems((d) => d.Identite.Email == demandeur.Email).FirstOrDefault();
+            if (resut == null)
+            {   
+                userCollection.NewItems(new Demandeur
+                {
+                    Id=demandeur.Id,
+                    Identite = demandeur
+                });
+                return StatusCode(200, "Success: Compte Utilisateur crée avec succes");
+            }
+            else
+                return StatusCode(500, "Internal Server Error: Compte Utilisateur déjà existant");
         }
-        [HttpPut]
-        public void UpdateDemandeur([FromBody]Demandeur demandeur)
+        [HttpPut("update")]
+        public ActionResult UpdateDemandeur([FromBody]Demandeur demandeur)
         {
             UserCollection userCollection = new UserCollection();
-            userCollection.UpdateItem(demandeur.Identite.Id,demandeur);
+            var resut = userCollection.GetItems((d) => d.Id == demandeur.Id).FirstOrDefault();
+            if (resut != null) { 
+                userCollection.UpdateItem(demandeur.Identite.Id, demandeur);
+                return StatusCode(200, "Mofification reussi avec success!!");
+            }
+            else
+                return StatusCode(500, "Internal Server Error: Le compte utilisateur doit d'abord exister qvqnt toute modification");
         }
     }
 }

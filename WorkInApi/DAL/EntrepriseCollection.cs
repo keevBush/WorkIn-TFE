@@ -35,6 +35,7 @@ namespace WorkInApi.DAL
 
         public IEnumerable<Entreprise> GetItems(Expression<Func<Entreprise, bool>> where)
         {
+
             Uri collectionUri = UriFactory.CreateDocumentCollectionUri(CosmoDbConfig.Instance.DatabaseId, "entreprises");
             FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1 };
             IDocumentQuery<Entreprise> demandeurs;
