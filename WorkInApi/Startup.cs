@@ -17,7 +17,7 @@ namespace WorkInApi
 {
     public class Startup
     {
-        public Startup( IHostingEnvironment env)
+        public Startup( IHostingEnvironment env )
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
