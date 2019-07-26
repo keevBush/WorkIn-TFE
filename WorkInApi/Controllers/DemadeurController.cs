@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using WorkInApi.DAL;
 using WorkInApi.Models;
 
-namespace WorkInApi.Controllers
+namespace WorkInApi.Controllers 
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,10 +26,10 @@ namespace WorkInApi.Controllers
 
         // GET: api/Demadeur/5
         [HttpGet("{id}", Name = "Get")]
-        public IEnumerable<Demandeur> Get(string id)
+        public ActionResult<Demandeur> Get(string id)
         {
             UserCollection userCollection = new UserCollection();
-            return userCollection.GetItems((d) => d.Id == id);
+            return userCollection.GetItems((d) => d.Id == id).FirstOrDefault();
         }
 
         // POST: api/Demadeur
@@ -80,16 +80,24 @@ namespace WorkInApi.Controllers
                 return StatusCode(500, "Internal Server Error: Compte Utilisateur déjà existant");
         }
         [HttpPut("update")]
-        public ActionResult UpdateDemandeur([FromBody]Demandeur demandeur)
+        public ActionResult UpdateDemandeur([FromBody]string jsondata)
         {
+            var demandeurIdentite = JsonConvert.DeserializeObject<DemandeurIdentite>(jsondata);
             UserCollection userCollection = new UserCollection();
-            var resut = userCollection.GetItems((d) => d.Id == demandeur.Id).FirstOrDefault();
-            if (resut != null) { 
-                userCollection.UpdateItem(demandeur.Identite.Id, demandeur);
+            var resut = userCollection.GetItems((d) => d.Id == demandeurIdentite.Id).FirstOrDefault();
+            var test = userCollection.GetItems(d => d.Identite.Username == demandeurIdentite.Username).FirstOrDefault();
+            if (resut != null)
+                if (test != null)
+                    if (test.Id != resut.Id)
+                        return StatusCode(500, "Internal Server Error: Ce nom d'utilisateur existe déjà");
+            if (resut != null) {
+                resut.Identite = demandeurIdentite;
+                userCollection.UpdateItem(demandeurIdentite.Id, resut);
                 return StatusCode(200, "Mofification reussi avec success!!");
             }
             else
-                return StatusCode(500, "Internal Server Error: Le compte utilisateur doit d'abord exister qvqnt toute modification");
+                return StatusCode(500, "Internal Server Error: Le compte utilisateur doit d'abord exister avant toute modification");
         }
+        
     }
 }

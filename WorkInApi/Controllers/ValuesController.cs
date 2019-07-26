@@ -24,15 +24,28 @@ namespace WorkInApi.Controllers
         } 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<DemandeurIdentite>> Get()
         {
-            return new string[] { Hash("value1"),Hash ("value1" )};
+            return new DemandeurIdentite[] { new DemandeurIdentite{
+                Id=Guid.NewGuid().ToString(),
+                Email="email1"
+                },
+                new DemandeurIdentite{
+                Id=Guid.NewGuid().ToString(),
+                Email="email2"
+                },
+                new DemandeurIdentite{
+                Id=Guid.NewGuid().ToString(),
+                Email="email3"
+                }
+            };
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
+            //return null;
             var comment = new PredictedModels.PredictedCommentaire()
             {
                 Value = "Je déteste ce projet"

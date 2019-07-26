@@ -26,6 +26,8 @@ namespace WorkInApi.Models
         public string Adresse { get; set; }
         [JsonProperty("telephone")]
         public string Telephone { get; set; }
+        [JsonProperty("nationalite")]
+        public string Nationnalite { get; set; }
         [JsonProperty("genre")]
         public Genre Genre { get; set; }
         [JsonProperty("naissance")]

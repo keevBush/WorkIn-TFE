@@ -1,185 +1,43 @@
-﻿using Microsoft.ML;
+﻿using FirebaseNet.Messaging;
+using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Transforms;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace WorkInTest
 {
     class Program
     {
-        static void Main(string[] args)
+        static async System.Threading.Tasks.Task Main(string[] args)
         {
-            var pubs = new List<Publication>
+            try
             {
-                new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date= new DateTime(2018,12,12),
-                    Libele=new []{"HTML 5","CSS 3" },
-                    Link="link",
-                    UserIdentity="UId1"
-                    ,TypePublication=TypePublication.Link
-                    
-                },
-                new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date=new DateTime(2019,2,12),
-                    Libele=new []{"HTML 5","CSS 3" },
-                    Link="link",
-                    UserIdentity="UId2"
-                    ,TypePublication=TypePublication.Link
-                },
-                new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date=new DateTime(2019,1,1),
-                    Libele=new []{ "HTML 5","CSS 3" },
-                    Link="link",
-                    UserIdentity="UId1"
-                    ,TypePublication=TypePublication.Link
-                },
-                new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date=new DateTime(2019,5,12),
-                    Libele=new []{"HTML 5","CSS 3" },
-                    Link="link",
-                    UserIdentity="UId2"
-                    ,TypePublication=TypePublication.Link
-                },
-                 new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date=new DateTime(2019,6,12),
-                    Libele=new []{"HTML 5","CSS 3" },
-                    Link="link",
-                    UserIdentity="UId2"
-                     ,TypePublication=TypePublication.Link
-                },
-                 new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date=new DateTime(2019,5,12),
-                    Libele=new []{"HTML 5","CSS 3" ,"XML"},
-                    Link="link",
-                    UserIdentity="UId3"
-                     ,TypePublication=TypePublication.Link
-                },
-                  new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date=new DateTime(2019,5,12),
-                    Libele=new []{"HTML 5","XML"},
-                    Link="link",
-                    UserIdentity="UId4"
-                     ,TypePublication=TypePublication.Link
-                },
-                   new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date=new DateTime(2019,5,12),
-                    Libele=new []{"CSS 3" ,"XML"},
-                    Link="link",
-                    UserIdentity="UId5"
-                     ,TypePublication=TypePublication.Link
-                },
-                  new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date=new DateTime(2019,5,15),
-                    Libele=new []{"HTML 5","CSS 3","XML" },
-                    Link="link",
-                    UserIdentity="UId2"
-                     ,TypePublication=TypePublication.Link
-                },
-                   new Publication
-                {
-                    Id=Guid.NewGuid().ToString(),
-                    Date=DateTime.Now,
-                    Libele=new []{"HTML 5","CSS 3" },
-                    Link="link",
-                    UserIdentity="UId1"
-                     ,TypePublication=TypePublication.Link
-                },
+                FCMClient client = new FCMClient("AAAACZAcRsE:APA91bH0culzhfx1sCo5pybkZIwywXzVfYVkQ9-TWx4nVV1D5teJY-TLA9N570Wn4Rmb7GY98Jh6DBpcaru9vw7sA_7SsuGh4Jf4-2ES3_3YfsRBqOyFcGCWygB0I6C5wewlPVsGiv4T");
 
-            };
-            var _mlContext = new MLContext(seed: 0);
-            var _trainingDataView = _mlContext.Data.LoadFromEnumerable(pubs);
-            var pipeline = _mlContext.Transforms.Conversion.MapValueToKey(inputColumnName: "UserIdentity", outputColumnName: "Label")
-                .Append(_mlContext.Transforms.Text.FeaturizeText(inputColumnName: "Libele", outputColumnName: "LibeleFeaturized"))
-                .Append(_mlContext.Transforms.Text.FeaturizeText(inputColumnName: "Date", outputColumnName: "DateFeaturized"))
-                .Append(_mlContext.Transforms.Concatenate("Features", "LibeleFeaturized", "DateFeaturized"));
-                //.AppendCacheCheckpoint(_mlContext);
-
-            var trainingPipeline = pipeline.Append(_mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy("Label", "Features"))
-                   .Append(_mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
-            var _trainedModel = trainingPipeline.Fit(_trainingDataView);
-
-            var _predEngine = _mlContext.Model.CreatePredictionEngine<Publication, UserPredict>(_trainedModel);
-            var post = new Publication
+                var message = new Message()
+                {
+                    To = "eSEBDKMsprk:APA91bFbrkfzAN13Oh0LhA7CHWECWuruw2GqROqMNxDrjqLII0wWRDbGKChrKuJ3hxB-NpBpDJu-_FjQipZeDuH5L10sx2rxpYr7hG2U3jMbtTdFIzn4i3-xMuU6Y9aAkfzPe4m2Btnt",
+                    Notification = new AndroidNotification()
+                    {
+                        Body = "great match!",
+                        Title = "Portugal vss Denmark"
+                    }
+                };
+                
+                var result = await client.SendMessageAsync(message);
+                Console.WriteLine(result);
+                Console.ReadKey();
+            }
+            catch (Exception)
             {
-                Date = DateTime.Now,
-                Libele = new [] { "XAML" },
-            };
-            Console.WriteLine(JsonConvert.SerializeObject( _predEngine.Predict(post)));
-            //Console.WriteLine(JsonConvert.SerializeObject(ConsumeModel()));
-            Console.ReadKey();
+
+                throw;
+            }
+            
         }
-
-        
-
-        //public static ModelOutput ConsumeModel()
-        //{
-        //    // Load the model
-        //    MLContext mlContext = new MLContext();
-        //    ITransformer mlModel = mlContext.Model.Load("MLModel.zip", out var modelInputSchema);
-        //    var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
-
-        //    // Use the code below to add input data
-        //    var input = new ModelInput() {
-        //        Date=DateTime.Now.ToString(),
-        //        IdPub=Guid.NewGuid().ToString(),
-        //        Libele="XML"
-        //    };
-        //    // input.
-
-        //    // Try model on sample data
-        //    ModelOutput result = predEngine.Predict(input);
-        //    return result;
-        //}
     }
-    public class Publication
-    {
-        [NoColumn]
-        public string Id { get; set; }
-        [VectorType()]
-        public string[] Libele { get; set; }
-        public string UserIdentity { get; set; }// = new UserIdentity();
-        [VectorType()]
-        public DateTime Date { get; set; }
-        public string Link { get; set; }
-        [NoColumn]
-        public TypePublication TypePublication { get; set; }
-    }
-    public enum TypePublication
-    {
-        Texte,Link,Image,Video
-    }
-
-    public class UserIdentity
-    {
-        [ColumnName("userId")]
-        public string Id { get; set; }
-        [ColumnName("userNom")]
-        public string Nom { get; set; }
-        
-    }
-    public class UserPredict
-    {
-        [ColumnName("PredictedLabel")]
-        public string UserIdentity { get; set; }
-    }
+    
 }
