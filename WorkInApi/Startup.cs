@@ -39,7 +39,7 @@ namespace WorkInApi
                 options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:5002")
+                    builder.WithOrigins("http://localhost:8080")
                                         .AllowAnyHeader()
                                         .AllowAnyMethod();
                 });
