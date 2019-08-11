@@ -17,6 +17,17 @@ namespace WorkInApi.PredictedModels
         public bool SentimentType { get; set; }
         [JsonProperty("probabilite")]
         public float Probabilite { get; set; }
+        public PredictedCommentaire() : base()
+        {
+
+        }
+        public PredictedCommentaire(Commentaire commentaire):base()
+        {
+            base.Date = commentaire.Date;
+            base.Id = commentaire.Id;
+            base.Sentiment = commentaire.Sentiment;
+            base.Value = commentaire.Value;
+        }
         
     }
 }

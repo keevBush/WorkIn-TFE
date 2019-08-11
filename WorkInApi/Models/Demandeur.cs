@@ -16,6 +16,8 @@ namespace WorkInApi.Models
         public IEnumerable<ExperienceProfessionnelle> ExperienceProfessionnelles { get; set; }
         [JsonProperty("messages")]
         public IEnumerable<Discussion> Messages { get; set; }
+        [JsonProperty("publications")]
+        public IEnumerable<Publication> Publications { get; set; }
         [JsonProperty("competances")]
         public IEnumerable<Competance> Competances { get; set; }
         [JsonProperty("parcours")]

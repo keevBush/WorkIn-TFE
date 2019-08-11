@@ -8,6 +8,8 @@ namespace WorkInApi.Models
 {
     public class Publication
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
         [JsonProperty("publicationDetails")]
         public PublicationDetails PublicationDetails { get; set; }
         [JsonProperty("commentaires")]
