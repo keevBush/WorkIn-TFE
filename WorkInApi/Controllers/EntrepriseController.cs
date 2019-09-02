@@ -64,10 +64,10 @@ namespace WorkInApi.Controllers
                 (e) => e.EmployeurIdentite.Email == identite.Email && e.EmployeurIdentite.MotDePasse == identite.MotDePasse).FirstOrDefault();
             if (entreprise == null)
                 return StatusCode(500, "Internal Server Error, Entreprise Not Found");
-            var token = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("userkeyBush"));
+            var token = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("userkeyBush@243789"));
             var tokencredentials = new SigningCredentials(token, SecurityAlgorithms.HmacSha256);
-            var tokenOptions = new JwtSecurityToken(issuer: "https://workin-api.azurewebsites.net/api", 
-                                                    audience: "https://workin-api.azurewebsites.net/api", 
+            var tokenOptions = new JwtSecurityToken(issuer: "http://localhost:5002/api", 
+                                                    audience: "http://localhost:5002/api", 
                                                     claims: new List<Claim>(), expires: DateTime.Now.AddDays(1), 
                                                     signingCredentials:tokencredentials);
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
