@@ -11,12 +11,12 @@ namespace WorkInApi.PredictedModels
     public class PredictedCommentaire:Commentaire
     {
         [JsonProperty("score")]//le score que le commentaire aura
-        public float Score { get; set; }
+        public float? Score { get; set; }
         [JsonProperty("sentiment_type")]
         [ColumnName("PredictedLabel")]//true= positive sentiment false=negative sentiment
         public bool SentimentType { get; set; }
         [JsonProperty("probabilite")]
-        public float Probabilite { get; set; }
+        public float? Probabilite { get; set; }
         public PredictedCommentaire() : base()
         {
 

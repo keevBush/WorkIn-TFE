@@ -37,7 +37,7 @@ namespace WorkInApi.DAL
         {
 
             Uri collectionUri = UriFactory.CreateDocumentCollectionUri(CosmoDbConfig.Instance.DatabaseId, "entreprises");
-            FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1 };
+            FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true };
             IDocumentQuery<Entreprise> demandeurs;
             if (where == null)
                 demandeurs = CosmoDbConfig.Instance.Client.

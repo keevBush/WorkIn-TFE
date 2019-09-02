@@ -9,7 +9,7 @@ namespace WorkInApi.Models
         public string Id { get; set; }
         [JsonProperty("offre")]
         public Offre Offre { get; set; }
-        [JsonProperty("demandeur")]
+        [JsonProperty("demandeursInteressees")]
         public IEnumerable<DemandeurIdentite> DemandeurIdentites { get; set; }
     }
 }

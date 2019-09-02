@@ -39,20 +39,19 @@ namespace WorkInApi
                 options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:5002")
+                    builder.WithOrigins("http://localhost:4200")
                                         .AllowAnyHeader()
                                         .AllowAnyMethod();
                 });
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly string MyAllowSpecificOrigins = "CorsPolicy";
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
-             
                 app.UseDeveloperExceptionPage();
             }
             app.UseExceptionHandler(a => a.Run(async context =>
@@ -66,6 +65,7 @@ namespace WorkInApi
             }));
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseCors("CorsPolicy");
         }
     }
 }

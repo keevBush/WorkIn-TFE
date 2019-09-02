@@ -78,26 +78,26 @@ namespace WorkInApi.Controllers
                     return StatusCode(200, user.Publications);
             
         }
-        [HttpPost("{id}/publications/nouvel")]
-        public ActionResult NewPublication(string id,[FromBody]string jsondata)
-        {
-            var publication = JsonConvert.DeserializeObject<Publication>(jsondata);
-            var user = new UserCollection().GetItems(u => u.Id == id).FirstOrDefault();
-            if (user == null)
-                return StatusCode(500, "Internal Server Error: Utilisateur inexistant");
-            else
-            {
-                if (user.Publications == null)
-                    user.Publications = new List<Publication>
-                    {
-                        publication
-                    };
-                else
-                    user.Publications.ToList().Add(publication);
-                new UserCollection().UpdateItem(id, user);
-                return StatusCode(200, "Ajout effectué avec succès");
-            }
-        }
+        //[HttpPost("{id}/publications/nouvel")]
+        //public ActionResult NewPublication(string id,[FromBody]string jsondata)
+        //{
+        //    var publication = JsonConvert.DeserializeObject<Publication>(jsondata);
+        //    var user = new UserCollection().GetItems(u => u.Id == id).FirstOrDefault();
+        //    if (user == null)
+        //        return StatusCode(500, "Internal Server Error: Utilisateur inexistant");
+        //    else
+        //    {
+        //        if (user.Publications == null)
+        //            user.Publications = new List<Publication>
+        //            {
+        //                publication
+        //            };
+        //        else
+        //            user.Publications.ToList().Add(publication);
+        //        new UserCollection().UpdateItem(id, user);
+        //        return StatusCode(200, "Ajout effectué avec succès");
+        //    }
+        //}
         [HttpGet("{id}/ranking")]
         public ActionResult<int> GetRanking(string id)
         {
@@ -109,7 +109,7 @@ namespace WorkInApi.Controllers
                 try
                 {
                     var publications = user.Publications;
-                    var ranking = 0.0;
+                    double? ranking = 0.0;
                     foreach (var pub in publications)
                     {
                         if (pub.Commentaires == null)

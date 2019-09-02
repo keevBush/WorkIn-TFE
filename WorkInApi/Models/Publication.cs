@@ -10,7 +10,7 @@ namespace WorkInApi.Models
     {
         [JsonProperty("id")]
         public string Id { get; set; }
-        [JsonProperty("publicationDetails")]
+        [JsonProperty("details")]
         public PublicationDetails PublicationDetails { get; set; }
         [JsonProperty("commentaires")]
         public IEnumerable<Commentaire> Commentaires { get; set; }
