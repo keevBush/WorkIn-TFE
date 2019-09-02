@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using WorkInApi.DAL;
 using WorkInApi.Models;
@@ -54,13 +58,25 @@ namespace WorkInApi.Controllers
         }
         [EnableCors("CorsPolicy")]
         [HttpPost("connexion")]
-        public ActionResult<Entreprise> Connexion([FromBody]EmployeurIdentite identite)
+        public ActionResult<EmployeurIdentite> Connexion([FromBody]EmployeurIdentite identite)
         {
             var entreprise = new EntrepriseCollection().GetItems(
                 (e) => e.EmployeurIdentite.Email == identite.Email && e.EmployeurIdentite.MotDePasse == identite.MotDePasse).FirstOrDefault();
             if (entreprise == null)
                 return StatusCode(500, "Internal Server Error, Entreprise Not Found");
-            return entreprise;
+            var token = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("userkeyBush"));
+            var tokencredentials = new SigningCredentials(token, SecurityAlgorithms.HmacSha256);
+            var tokenOptions = new JwtSecurityToken(issuer: "https://workin-api.azurewebsites.net/api", 
+                                                    audience: "https://workin-api.azurewebsites.net/api", 
+                                                    claims: new List<Claim>(), expires: DateTime.Now.AddDays(1), 
+                                                    signingCredentials:tokencredentials);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return Ok(new
+            {
+                token=tokenString,
+                entreprise = entreprise.EmployeurIdentite
+
+            });
         }
         [HttpPost("{id}/offres/{idOffre}/postuler")]
         public ActionResult Postuler(string id, string idOffre,[FromBody]string jsondata)
