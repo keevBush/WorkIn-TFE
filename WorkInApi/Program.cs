@@ -19,7 +19,6 @@ namespace WorkInApi
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .UseUrls("http://*:5002")
                 .UseStartup<Startup>();
     }
 }
