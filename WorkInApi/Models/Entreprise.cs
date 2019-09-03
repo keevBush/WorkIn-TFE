@@ -13,6 +13,6 @@ namespace WorkInApi.Models
         [JsonProperty("identite")]
         public EmployeurIdentite EmployeurIdentite { get; set; }
         [JsonProperty("propositions")]
-        public IEnumerable<Proposition> Propositions { get; set; }
+        public IEnumerable<Offre> Propositions { get; set; }
     }
 }

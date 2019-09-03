@@ -83,6 +83,37 @@ namespace WorkInApi.Controllers
         {
             return StatusCode(200);
         }
+        [EnableCors("CorsPolicy")]
+        [HttpPost("{id}/propositions/new")]
+        public ActionResult NewProposition(string id,[FromBody]Offre offre)
+        {
+            try
+            {
+                var proposition = new Proposition
+                {
+                    Id = offre.Id,
+                    Offre = offre
+                };
+                var entrepriseCollection = new EntrepriseCollection();
+                var entreprise = entrepriseCollection.GetItems(e => e.Id == id).FirstOrDefault();
+                if (entreprise == null)
+                    return StatusCode(500, "Internal Server Error: Entreprise not found");
+                if (entreprise.Propositions == null)
+                {
+                    entreprise.Propositions = new List<Offre>();
+                }
+                ((List<Offre>)(entreprise.Propositions)).Add(offre);
+                entrepriseCollection.UpdateItem(entreprise.Id, entreprise);
+                var propositionCollection = new PropositionCollection();
+                propositionCollection.NewItems(proposition);
+                return Ok("Propositions posté avec success");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+            
+        }
 
         [HttpPost,DisableRequestSizeLimit]
         public void UploadFile()

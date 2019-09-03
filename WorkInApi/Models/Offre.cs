@@ -20,6 +20,10 @@ namespace WorkInApi.Models
         public string Details { get; set; }
         [JsonProperty("deadline")]
         public DateTime? DeadLine { get; set; } = null;
+        [JsonProperty("maxParticipant")]
+        public int? MaxParticipant { get; set; }
+        [JsonProperty("competences")]
+        public IEnumerable<string> Competences { get; set; }
     }
     public enum TypeOffre
     {
