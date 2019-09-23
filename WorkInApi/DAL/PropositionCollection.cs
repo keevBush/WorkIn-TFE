@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,35 @@ namespace WorkInApi.DAL
 
         public IEnumerable<Proposition> GetAllItem()
         {
-            throw new NotImplementedException();
+            Uri collectionUri = UriFactory.CreateDocumentCollectionUri(CosmoDbConfig.Instance.DatabaseId, "propositions");
+            FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1 };
+            IDocumentQuery<Proposition> demandeurs = CosmoDbConfig.Instance.Client.
+                    CreateDocumentQuery<Proposition>(collectionUri, feedOptions)
+                    .AsDocumentQuery();
+            List<Proposition> listofEntreprise = new List<Proposition>();
+            while (demandeurs.HasMoreResults)
+                listofEntreprise.AddRange(demandeurs.ExecuteNextAsync<Proposition>().Result);
+            return listofEntreprise;
         }
 
         public IEnumerable<Proposition> GetItems(Expression<Func<Proposition, bool>> where)
         {
-            throw new NotImplementedException();
+            Uri collectionUri = UriFactory.CreateDocumentCollectionUri(CosmoDbConfig.Instance.DatabaseId, "propositions");
+            FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true };
+            IDocumentQuery<Proposition> propositions;
+            if (where == null)
+                propositions = CosmoDbConfig.Instance.Client.
+                    CreateDocumentQuery<Proposition>(collectionUri, feedOptions)
+                    .AsDocumentQuery();
+            else
+                propositions = CosmoDbConfig.Instance.Client.
+                    CreateDocumentQuery<Proposition>(collectionUri, feedOptions)
+                    .Where(where)
+                    .AsDocumentQuery();
+            List<Proposition> listofPropositions = new List<Proposition>();
+            while (propositions.HasMoreResults)
+                listofPropositions.AddRange(propositions.ExecuteNextAsync<Proposition>().Result);
+            return listofPropositions;
         }
 
         public void NewItems(params Proposition[] items)

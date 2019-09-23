@@ -32,7 +32,22 @@ namespace WorkInApi.DAL
 
         public IEnumerable<Publication> GetItems(Expression<Func<Publication, bool>> where)
         {
-            throw new NotImplementedException();
+            Uri collectionUri = UriFactory.CreateDocumentCollectionUri(CosmoDbConfig.Instance.DatabaseId, "publications");
+            FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true };
+            IDocumentQuery<Publication> publications;
+            if (where == null)
+                publications = CosmoDbConfig.Instance.Client.
+                    CreateDocumentQuery<Publication>(collectionUri, feedOptions)
+                    .AsDocumentQuery();
+            else
+                publications = CosmoDbConfig.Instance.Client.
+                    CreateDocumentQuery<Publication>(collectionUri, feedOptions)
+                    .Where(where)
+                    .AsDocumentQuery();
+            List<Publication> listofPublications = new List<Publication>();
+            while (publications.HasMoreResults)
+                listofPublications.AddRange(publications.ExecuteNextAsync<Publication>().Result);
+            return listofPublications;
         }
 
         public void NewItems(params Publication[] items)
@@ -42,7 +57,14 @@ namespace WorkInApi.DAL
 
         public void UpdateItem(string id, Publication item)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(id.Trim()))
+                throw new InvalidOperationException("Id is not specified");
+            if (id != item.Id)
+                throw new InvalidOperationException("Les id ne correspondent pas");
+            Uri documentUri = UriFactory.CreateDocumentUri(CosmoDbConfig.Instance.DatabaseId, "publications", id);
+            CosmoDbConfig.Instance
+                    .Client
+                    .ReplaceDocumentAsync(documentUri, item);
         }
     }
 }

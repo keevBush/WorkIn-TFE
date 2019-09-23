@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace WorkInApi.Models
 {
-    public class Entreprise
+    public class CommentaireSend
     {
         [JsonProperty("id")]
         public string Id { get; set; }
-        [JsonProperty("identite")]
+        [JsonProperty("commentaire")]
+        public Commentaire Commentaire { get; set; }
+        [JsonProperty("employeur")]
         public EmployeurIdentite EmployeurIdentite { get; set; }
-        [JsonProperty("propositions")]
-        public IEnumerable<Offre> Propositions { get; set; }
-        [JsonProperty("publicites")]
-        public IEnumerable<Publicite> Publicites { get; set; }
     }
 }

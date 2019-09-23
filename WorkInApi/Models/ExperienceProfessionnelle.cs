@@ -18,7 +18,7 @@ namespace WorkInApi.Models
         public DateTime? Fin { get; set; }
         [JsonProperty("societe")]
         public string NomSociete { get; set; }
-        [JsonProperty("decription")]
+        [JsonProperty("description")]
         public string DescriptionPoste { get; set; }
     }
 }

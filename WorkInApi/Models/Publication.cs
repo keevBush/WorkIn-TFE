@@ -13,9 +13,11 @@ namespace WorkInApi.Models
         [JsonProperty("details")]
         public PublicationDetails PublicationDetails { get; set; }
         [JsonProperty("commentaires")]
-        public IEnumerable<Commentaire> Commentaires { get; set; }
+        public IEnumerable<CommentaireSend> Commentaires { get; set; }
         [JsonProperty("likes")]
         public IEnumerable<Like> Likes { get; set; }
+        [JsonProperty("demandeur")]
+        public DemandeurIdentite Demandeur { get; set; }
     }
     public enum TypePublication
     {

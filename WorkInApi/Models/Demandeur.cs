@@ -15,16 +15,29 @@ namespace WorkInApi.Models
         [JsonProperty("experienceprofessionnelles")]
         public IEnumerable<ExperienceProfessionnelle> ExperienceProfessionnelles { get; set; }
         [JsonProperty("messages")]
-        public IEnumerable<Discussion> Messages { get; set; }
+        public virtual IEnumerable<Discussion> Messages { get; set; }
         [JsonProperty("publications")]
-        public IEnumerable<Publication> Publications { get; set; }
+        public virtual IEnumerable<Publication> Publications { get; set; }
         [JsonProperty("competances")]
-        public IEnumerable<Competance> Competances { get; set; }
+        public virtual IEnumerable<string> Competances { get; set; }
         [JsonProperty("parcours")]
-        public IEnumerable<Parcour> Parcours { get; set; }
+        public virtual IEnumerable<Parcour> Parcours { get; set; }
         [JsonProperty("formations")]
-        public IEnumerable<Formation> Formations { get; set; }
+        public virtual IEnumerable<Formation> Formations { get; set; }
         [JsonProperty("offres")]
-        public IEnumerable<Offre> Offres { get; set; }
+        public virtual IEnumerable<Offre> Offres { get; set; }
+        [JsonProperty("notifications")]
+        public virtual IEnumerable<Notification> Notifications { get; set; }
+        public Demandeur()
+        {
+            this.Publications = new List<Publication>();
+            this.Messages = new List<Discussion>();
+            this.Identite = new DemandeurIdentite();
+            this.Competances = new List<string>();
+            this.Parcours = new List<Parcour>();
+            this.Formations = new List<Formation>();
+            this.Offres = new List<Offre>();
+            this.Notifications = new List<Notification>();
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace WorkInApi.Services
             try
             {
                 // Get azure table storage connection string.  
-                string ConnectionString = "DefaultEndpointsProtocol=https;AccountName=workinapi;AccountKey=i0Gmy98TzZnv+bjeaXE91whsxlDJoT7/OrpcdNFarrgwD4hnJpQzJHbojj+mmyDlM6FC3ODcCkWsyDVm6VfJEA==;EndpointSuffix=core.windows.net";
+                string ConnectionString = "DefaultEndpointsProtocol=https;AccountName=tfestorage12;AccountKey=CrJvfOVhUCWolMbycuO47LCyJWyRGmfm0Nld4ctskrbxnW2LUijuT13bpvpT6W+c90/HRvHXVXXDvNCUwAvDrg==;EndpointSuffix=core.windows.net"; 
                 CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
 
                 CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();

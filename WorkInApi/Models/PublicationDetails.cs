@@ -14,9 +14,11 @@ namespace WorkInApi.Models
         public string Legende { get; set; }
         [JsonProperty("value")]
         public string Value { get; set; }
-        [JsonProperty("tags")]
+        [JsonProperty("tag")]
         public IEnumerable<string> Tags { get; set; }
         [JsonProperty("typePublication")]   
         public TypePublication TypePublication { get; set; }
+        [JsonProperty("date")]
+        public DateTime Date { get; set; }
     }
 }

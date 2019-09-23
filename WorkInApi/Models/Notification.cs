@@ -10,10 +10,10 @@ namespace WorkInApi.Models
     {
         [JsonProperty("id")]
         public string Id { get; set; }
-        [JsonProperty("competance")]
+        [JsonProperty("msg")]
         public string Msg { get; set; }
-        [JsonProperty("page")]
-        public string Page { get; set; }
+        [JsonProperty("customData")]
+        public CustomDataNotifications customData { get; set; }
         [JsonProperty("date")]
         public DateTime Date { get; set; }
     }

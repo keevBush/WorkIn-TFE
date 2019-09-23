@@ -28,5 +28,9 @@ namespace WorkInApi.Models
         public string Email { get; set; }
         [JsonProperty("motDePasse")]
         public string MotDePasse { get; set; }
+        [JsonProperty("isActive")]
+        public bool IsActive { get; set; }
+        [JsonProperty("APropos")]
+        public string AboutEntreprise { get; set; }
     }
 }

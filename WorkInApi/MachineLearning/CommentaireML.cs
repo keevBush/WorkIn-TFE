@@ -17,7 +17,8 @@ namespace WorkInApi.MachineLearning
         public static TrainTestData LoadData(MLContext mlContext,PredictedCommentaire commentaire)
         {
             IEnumerable<PredictedCommentaire> commentaires = new CommentaireCollection().GetItems(c=>c.Value!=commentaire.Value);
-            IDataView dataView = mlContext.Data.LoadFromEnumerable<PredictedCommentaire>(commentaires);
+            IDataView dataView = mlContext.Data.LoadFromEnumerable(commentaires);
+            
             //Ce code utilise la méthode TrainTestSplit() pour diviser l'ensemble de données chargé en ensembles de données train et test et les retourner dans la classe TrainTestData. 
             //La valeur par défaut est 10%, dans ce cas nous utilisons 20% pour évaluer plus de données.
             TrainTestData splitDataView = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
@@ -64,17 +65,12 @@ namespace WorkInApi.MachineLearning
                 collection.NewItems(new PredictedCommentaire
                 {
                     Id = resultPrediction.Id,
-                    Value= resultPrediction.Value,
-                    Date=resultPrediction.Date,
-                    SentimentType = resultPrediction.SentimentType
+                    Value = resultPrediction.Value,
+                    Date = resultPrediction.Date,
+                    SentimentType = resultPrediction.SentimentType,
+                    Sentiment = resultPrediction.Sentiment
                 });
             return resultPrediction;
         }
-
-        
-
-       
-
-        
     }
 }

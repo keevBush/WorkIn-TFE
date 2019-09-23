@@ -23,7 +23,7 @@ namespace WorkInApi.DAL
         public IEnumerable<Demandeur> GetAllItem()
         {
             Uri collectionUri = UriFactory.CreateDocumentCollectionUri(CosmoDbConfig.Instance.DatabaseId, "demandeurs");
-            FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1 };
+            FeedOptions feedOptions = new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true };
             IDocumentQuery<Demandeur> demandeurs = CosmoDbConfig.Instance.Client.
                     CreateDocumentQuery<Demandeur>(collectionUri, feedOptions)
                     .AsDocumentQuery();
