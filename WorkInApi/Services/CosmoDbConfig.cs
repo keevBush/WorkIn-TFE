@@ -14,8 +14,8 @@ namespace WorkInApi.Services
             get
             {
                 if(_instance==null)
-                    _instance = new DefaultDocumentDBConnection("https://tfebush12.documents.azure.com:443/",
-                        "Fm5DY7GHRDXAC6ew2EWYXIGPBwt9IJY7PZ6MFaxmAWEitiJYzWqLYoyXxYiYatYakkZ5EwMgeALe7uZZbSJZAw==", "workin");
+                    _instance= new DefaultDocumentDBConnection("https://bushffe.documents.azure.com:443/",
+                        "qGwmco6RolIxOEoKw8UQYtn4e7gznkt9KWIN60Bv5zFAaLBPc2VFrPcud1Oq1or2qxj27wlvjeZPRLnLefSzcA==", "workin");
                 return _instance;
             }
         }
